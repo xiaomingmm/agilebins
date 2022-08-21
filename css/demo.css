@@ -1,0 +1,461 @@
+@charset "utf-8";
+/*!
+ * ------------------------------------------------------------
+ * ------------------------------------------------------------
+ *     
+ *                    _           
+ *   /\   _  o |  _  |_) o ._   _ 
+ *  /--\ (_| | | (/_ |_) | | | _> 
+ *        _|                     
+ *
+ * ------------------------------------------------------------
+ * ------------------------------------------------------------
+ *
+ * agilebins v1.0.3
+ *
+ * 快速解决网站上大部分特效展示...
+ * 官网: http://ab.geshai.com
+ *
+ * Copyright 2010-2022, Carlo,Cloud,Bonejay
+ *
+ * 请尊重原创，保留头部版权
+ * 在保留版权的前提下，可应用于个人或商业用途
+ *
+ */
+
+
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, code, del, dfn, em, img, q, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-weight: inherit;
+    font-style: inherit;
+    font-size: 100%;
+    font-family: inherit;
+    vertical-align: baseline;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+p {
+    word-wrap: break-word;
+}
+em, i {
+    font-style: normal;
+}
+li {
+    list-style: none;
+}
+img {
+    border: 0;
+    vertical-align: middle;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 100;
+}
+.clearfix:before, .clearfix:after {
+    content: "";
+    display: table;
+}
+.clearfix:after {
+    clear: both;
+}
+.clearfix {
+    zoom: 1;
+}
+.clear {
+    height: 0;
+    clear: both;
+    overflow: hidden;
+}
+body {
+    background: #0c91e8;
+    color: #0B9BCA;
+    font: 14px/24px "microsoft yahei", "SimHei", "SimSun";
+    -webkit-text-size-adjust: 100%;
+}
+a {
+    color: #39c;
+    text-decoration: none;
+}
+a:hover {
+    color: #9a5b00;
+    text-decoration: none;
+}
+.demo-js-area {
+    margin: 60px auto 80px auto;
+    width: 750px;
+    font-size: 14px;
+    color: #29c;
+}
+.codecont {
+    width: 700px;
+    text-align: left;
+    font-family: "Lucida Console", Monaco, monospace, "SimSun";
+    background: #323232;
+    padding: 30px;
+    border-radius: 30px;
+}
+.codecont p {
+    font-size: 14px;
+    height: 21px;
+    line-height: 21px;
+    overflow: hidden;
+}
+.codecont .html_line {
+    font-size: 12px;
+    font-style: italic;
+    width: 30px;
+    height: 21px;
+    float: left;
+    color: #3f5f72;
+    user-select: none;
+    border-right: 1px solid #2b414e;
+    overflow: hidden;
+}
+.codecont .html_size {
+    color: #50595d;
+    font-size: 12px;
+    padding-left: 50px;
+    user-select: none;
+}
+.codecont .html_name {
+    color: #37c;
+}
+.codecont .html_tit {
+    color: #377;
+}
+.codecont .script_tag {
+    color: #c55;
+}
+.codecont .script_tag2 {
+    color: #36c;
+    font-weight: bold;
+}
+.codecont .href_tag {
+    color: #3c3;
+}
+.codecont .img_tag {
+    color: #c3c;
+}
+/* 头部 */
+.demo-header {
+    width: 100%;
+    padding: 50px 0 10px 0;
+    overflow: hidden;
+}
+.demo-header .logo-tit {
+    width: 220px;
+    height: 50px;
+    margin: 20px auto 0 auto;
+    font-size: 0;
+    text-align: center;
+    overflow: hidden;
+}
+.demo-header a {
+    width: 220px;
+    height: 50px;
+    display: block;
+    background: url(img/logo2.png) no-repeat;
+}
+.demo-header a:hover {
+    background: url(img/logo.png) no-repeat;
+}
+.demo-header .subtit {
+    text-align: center;
+    font-size: 13px;
+    color: #ddf0fb;
+    font-weight: 100;
+    text-indent: 100px;
+}
+.topnav {
+    float: right;
+    padding-right: 20px;
+    position: relative;
+}
+.topnav li {
+    float: left;
+    font-size: 14px;
+    overflow: hidden;
+}
+.topnav li a {
+    text-decoration: none;
+    color: #eef7fe;
+    padding: 0 10px;
+    display: block;
+}
+.topnav li a:hover {
+    color: #fff;
+}
+.demo-main {
+    width: 100%;
+    padding: 100px 0 200px 0;
+    margin: 0 auto;
+}
+.demo-tit {
+    text-align: center;
+    font-size: 34px;
+    height: 240px;
+    line-height: 240px;
+    font-weight: 700;
+    letter-spacing: .03em;
+    color: #ddf0fb;
+}
+.demo-tit a {
+    font-size: 32px;
+    height: 160px;
+    line-height: 160px;
+    font-weight: 100;
+    color: #fff;
+    margin: 50px;
+}
+.demo-tit a:hover {
+    color: #4ad585;
+}
+/* 导航演示 */
+ .demo-nav {
+    width: 1000px;
+    margin: 0 auto;
+    height: 50px;
+    background: #fff;
+    border-radius: 50px;
+}
+.demo-nav .one {
+    padding-left: 50px;
+}
+.demo-nav .conts {
+    position: relative;
+    float: left;
+    line-height: 50px;
+    padding: 0 30px;
+}
+.demo-nav h3 {
+    font-size: 16px;
+    font-weight: 700;
+}
+.demo-nav h3 a {
+    color: #39c;
+}
+.demo-nav h3 a:hover {
+    color: #fff;
+    text-decoration: none;
+}
+.demo-nav .on {
+    background: #3c3;
+}
+.demo-nav .on a {
+    color: #fff;
+}
+.demo-nav .on a:hover {
+    color: #fff;
+    text-decoration: none;
+}
+.demo-nav .sub {
+    display: none;
+    text-align: center;
+    width: 120px;
+    background-color: #3c3;
+}
+.demo-nav .sub ul {
+    padding: 20px 0;
+}
+.demo-nav .sub li {
+    color: #fff;
+    text-align: center;
+    font-size: 14px;
+    line-height: 28px;
+}
+.demo-nav .sub li a {
+    color: #fff;
+}
+.demo-nav .sub li a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+/* 图文左右滚动 */
+ .domo-pic-scroll-lr {
+    width: 1050px;
+    height: 150px;
+    position: relative;
+    margin: 0 auto;
+}
+.domo-pic-scroll-lr .conts li a {
+    color: #39c;
+    display: block;
+    width: 200px;
+    height: 120px;
+    background: #fff;
+}
+.domo-pic-scroll-lr .conts li a:hover {
+    color: #3399cc;
+    text-decoration: none;
+}
+.domo-pic-scroll-lr .conts li {
+    float: left;
+    text-align: center;
+    width: 200px;
+    height: 120px;
+    font-size: 32px;
+    font-style: italic;
+    font-weight: 700;
+    text-align: center;
+    color: #39c;
+    line-height: 120px;
+    margin: 0 5px;
+    overflow: hidden;
+}
+.domo-pic-scroll-lr .prev, .domo-pic-scroll-lr .next {
+    z-index: 1;
+    position: absolute;
+    top: 35%;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+}
+.domo-pic-scroll-lr .prev {
+    left: -37px;
+    background: url(img/arrow_l.png) no-repeat;
+}
+.domo-pic-scroll-lr .prev:hover {
+    background: url(img/arrow_l_2.png) no-repeat;
+}
+.domo-pic-scroll-lr .next {
+    right: -37px;
+    background: url(img/arrow_r.png) no-repeat;
+}
+.domo-pic-scroll-lr .next:hover {
+    background: url(img/arrow_r_2.png) no-repeat;
+}
+.domo-pic-scroll-lr .tabs {
+    width: 100%;
+    height: 11px;
+    line-height: 11px;
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+}
+.domo-pic-scroll-lr .tabs ul {
+    text-align: center;
+    height: 11px;
+}
+.domo-pic-scroll-lr .tabs ul li {
+    line-height: 999px;
+    width: 11px;
+    height: 11px;
+    border-radius: 11px;
+    margin: 0 5px;
+    cursor: pointer;
+    background: #e5f9ff;
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+    cursor: pointer;
+    display: inline-block;
+    *display: inline;
+    zoom: 1;
+    overflow: hidden;
+}
+.domo-pic-scroll-lr .tabs ul .current {
+    background: #4ad585 !important;
+}
+/* 幻灯片 */
+ .domo-slides {
+    margin: 0 auto;
+    width: 500px;
+    height: 350px;
+    zoom: 1;
+    position: relative;
+}
+.domo-slides .conts {
+    width: 500px;
+    height: 320px;
+    overflow: hidden;
+}
+.domo-slides .conts ul {
+    width: 500px;
+    height: 320px;
+}
+.domo-slides .conts li {
+    width: 500px;
+    height: 320px;
+    line-height: 320px;
+    color: #39c;
+    font-size: 48px;
+    font-style: italic;
+    font-weight: 700;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+}
+.domo-slides .conts li a {
+    display: block;
+    width: 500px;
+    height: 320px;
+    background: #fff;
+    color: #39c;
+}
+.domo-slides .conts li a:hover {
+    color: #3399cc;
+    text-decoration: none;
+}
+.domo-slides .prev, .domo-slides .next {
+    z-index: 1;
+    position: absolute;
+    top: 40%;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+}
+.domo-slides .prev {
+    left: -42px;
+    background: url(img/arrow_l.png) no-repeat;
+}
+.domo-slides .prev:hover {
+    background: url(img/arrow_l_2.png) no-repeat;
+}
+.domo-slides .next {
+    right: -42px;
+    background: url(img/arrow_r.png) no-repeat;
+}
+.domo-slides .next:hover {
+    background: url(img/arrow_r_2.png) no-repeat;
+}
+.domo-slides .tabs {
+    width: 100%;
+    height: 11px;
+    line-height: 11px;
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+}
+.domo-slides .tabs ul {
+    text-align: center;
+    height: 11px;
+}
+.domo-slides .tabs ul li {
+    line-height: 999px;
+    width: 11px;
+    height: 11px;
+    border-radius: 11px;
+    margin: 0 5px;
+    cursor: pointer;
+    background: #e5f9ff;
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+    cursor: pointer;
+    display: inline-block;
+    *display: inline;
+    zoom: 1;
+    overflow: hidden;
+}
+.domo-slides .tabs ul .current {
+    background: #4ad585 !important;
+}
+
+				
+				
+				
