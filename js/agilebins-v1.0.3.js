@@ -1,11 +1,11 @@
 /*!
  * ------------------------------------------------------------
  * ------------------------------------------------------------
- *     
- *                    _           
- *   /\   _  o |  _  |_) o ._   _ 
- *  /--\ (_| | | (/_ |_) | | | _> 
- *        _|                     
+ *
+ *                    _
+ *   /\   _  o |  _  |_) o ._   _
+ *  /--\ (_| | | (/_ |_) | | | _>
+ *        _|
  *
  * ------------------------------------------------------------
  * ------------------------------------------------------------
@@ -75,6 +75,7 @@
 				"addY": 0, /* box|menu, 垂直方向偏移像素 */
 				"iTrigger": "", /* menu, 激活菜单子元素,响应事件时可关闭 */
 				"iTriggerFunc": "", /* menu, 激活菜单子元素响应事件回调函数 */
+				"stopPropagation": false, /* menu, 阻止事件冒泡，当有嵌套三级以上下拉菜单时设为false */
 				
 				"initFunc": "", /* 初始化扩展函数 */
 				"startFunc": "", /* 动画起始扩展函数执行 */
@@ -354,6 +355,7 @@
 				_sEffect = _opts.sEffect,
 				_easing = _opts.easing,
 				_event = (_opts.eventType != "mouseover" ? "click" : _mEnter),
+				_stopPropagation = f_rtnBool(_opts.stopPropagation),
 			
 				_autoPlay = f_rtnBool(_opts.autoPlay),
 				_loop = f_rtnBool(_opts.loop),
@@ -1638,9 +1640,12 @@
 						// effect
 						f_triggerEffect(__cTarget, "s", _effect, _speed, _easing, (function(){ f_completeFuncDo(); }));
 					}, _triggerTime);
-					
-					__e.stopPropagation();
-					return false;
+
+					// 阻止事件冒泡
+					if (_stopPropagation) {
+						__e.stopPropagation();
+						return false;
+					}
 				});
 				
 				/* 鼠标离开 */
@@ -1674,9 +1679,12 @@
 							}
 						}
 					}, _triggerTime);
-					
-					__e.stopPropagation();
-					return false;
+
+					// 阻止事件冒泡
+					if (_stopPropagation) {
+						__e.stopPropagation();
+						return false;
+					}
 				});
 				
 				/* 返回默认 */
