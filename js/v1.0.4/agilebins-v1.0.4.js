@@ -359,7 +359,6 @@
 			"scroll": [],
 			"sPrev": [],
 			"sNext": [],
-			"index": 0,
 			"el": [],
 		};
 
@@ -1809,20 +1808,25 @@
 						break;
 				};
 			};
+
+			/**
+			 * 生成返回参数
+			 */
+			var f_makeReturn = function() {
+				__rtnObject.slide[__eachIndex] = function (__eIndex) { f_slideDo(__eIndex); };
+				__rtnObject.mPrev[__eachIndex] = function () { f_mPrevDo(); };
+				__rtnObject.mNext[__eachIndex] = function () { f_mNextDo(); };
+
+				__rtnObject.scroll[__eachIndex] = function (__ePage) { f_scrollDo(__ePage); };
+				__rtnObject.sPrev[__eachIndex] = function () { f_sPrevDo(); };
+				__rtnObject.sNext[__eachIndex] = function () { f_sNextDo(); };
+			};
 			
 			/* 创建效果应用开始 */
 			f_appCreate();
 
 			/* Return */
-			__rtnObject.index = __eachIndex;
-
-			__rtnObject.slide[__eachIndex] = f_slideDo;
-			__rtnObject.mPrev[__eachIndex] = f_mPrevDo;
-			__rtnObject.mNext[__eachIndex] = f_mNextDo;
-
-			__rtnObject.scroll[__eachIndex] = f_scrollDo;
-			__rtnObject.sPrev[__eachIndex] = f_sPrevDo;
-			__rtnObject.sNext[__eachIndex] = f_sNextDo;
+			f_makeReturn();
 		});
 
 		return __rtnObject;
