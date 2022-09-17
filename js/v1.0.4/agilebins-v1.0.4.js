@@ -10,7 +10,7 @@
  * ------------------------------------------------------------
  * ------------------------------------------------------------
  *
- * agilebins v1.0.3
+ * agilebins v1.0.4
  *
  * 快速解决网站上大部分特效展示...
  * 官网: http://ab.geshai.com
@@ -23,11 +23,33 @@
  */
 ;(function($){
 	$.fn.agilebins=function(_arg_options, _evt){
+		/* ab template value */
+		var _AB_TV_ = {
+			/* ================= 模板参数 ================= */
+			"t": "top",
+			"b": "bottom",
+			"l": "left",
+			"r": "right",
+
+			"s": "show",
+			"h": "hide",
+			"n": "none",
+
+			"c": "click",
+
+			"sw": "width",
+			"sh": "height",
+
+			"pr": "position:relative; overflow:hidden;"
+		};
+
+		/* ab options */
 		var _AB_FN_ = {
+			"version": "1.0.4",
 			/* ================= 参数选项 ================= */
 			"options": {
 				"type": "slide", /* 效果类型: slide, menu, box */
-				"direction": "left", /* 滚动方向: left, right, top, bottom */
+				"direction": _AB_TV_.l, /* 滚动方向: left, right, top, bottom */
 				"eventType": "mouseover", /* 事件类型: mouseover, click */
 				
 				"index": 0, /* 默认指定索引: 从0开始 */
@@ -177,7 +199,9 @@
 			
 			var __img = new Image();
 				__img.onload = function() {
-					__o.attr("src", __o.attr(__src)).removeAttr(__src);
+					/*__o.attr("width", __img.width);
+					__o.attr("height", __img.height);*/
+					__o.attr("src", __o.attr(__src))/*.removeAttr(__src)*/;
 				};
 				__img.src = __o.attr(__src);
 		};
@@ -204,7 +228,7 @@
 		var f_isHide = function(o){
 			if(!f_chkEl(o)){ return false; }
 			
-			return (o.css("display") != "none" ? false : true);
+			return (o.css("display") != _AB_TV_.n ? false : true);
 		};
 		
 		/**
@@ -256,14 +280,14 @@
 			
 			/* 计算坐标 */
 			if((__boxData.width <= (__memorySpace.width - x)) || (__titData <= (__memorySpace.width - x))) {
-				__style.left = (0 + x) + "px";
+				__style.left = f_px(0 + x);
 			}else{
-				__style.right = (0 + x) + "px";
+				__style.right = f_px(0 + x);
 			}
 			if((__boxData.height <= (__memorySpace.height - y)) || (__titData.top <= (__memorySpace.height - y))) {
-				__style.top = (__titData.height + y) + "px";
+				__style.top = f_px(__titData.height + y);
 			}else{
-				__style.bottom = (__titData.height + y) + "px";
+				__style.bottom = f_px(__titData.height + y);
 			}
 			
 			b.css(__style);
@@ -274,7 +298,7 @@
 		 * @param {String} k 参数名
 		 */
 		var f_dir = function(k){
-			var _od = {"top": "top", "bottom": "bottom", "left": "left", "right":"right"},
+			var _od = {"top": _AB_TV_.t, "bottom": _AB_TV_.b, "left": _AB_TV_.l, "right": _AB_TV_.r},
 				_d = {"t": _od.top, "b": _od.bottom, "l": _od.left, "r": _od.right};
 				
 			if(f_isValue(k)){
@@ -302,25 +326,25 @@
 		var f_triggerEffect = function(__o, __t, __ee, __st, __eas, __cb){
 			if(!f_chkEl(__o)){ return false; }
 			
-			__t = (__t != "h" ? "show" : "hide");
+			__t = (__t != "h" ? _AB_TV_.s : _AB_TV_.h);
 			
 			switch(__ee){
 				case "fade":
-					if(__t == "hide"){
+					if(__t == _AB_TV_.h){
 						f_animateStop(__o).animate({"opacity": __t}, __st, __eas, __cb);
 					}else{
 						f_animateStop(__o).animate({"opacity": __t}, __st, __eas, __cb);
 					}
 				break;
 				case "slideDown":
-					if(__t == "hide"){
+					if(__t == _AB_TV_.h){
 						f_animateStop(__o).slideUp(__st, __eas, __cb);
 					}else{
 						f_animateStop(__o).slideDown(__st, __eas, __cb);
 					}
 				break;
 				default:
-					if(__t == "hide"){
+					if(__t == _AB_TV_.h){
 						f_animateStop(__o).hide(__st, __eas, __cb);
 					}else{
 						f_animateStop(__o).show(__st, __eas, __cb);
@@ -328,8 +352,20 @@
 				break;
 			}
 		};
-		
-		return this.each(function() {	
+
+		// Return parameter
+		var __rtnObject = {
+			"slide": [],
+			"mPrev": [],
+			"mNext": [],
+			"scroll": [],
+			"sPrev": [],
+			"sNext": [],
+			"el": []
+		};
+
+		/* Element */
+		__rtnObject.el = this.each(function(__eachIndex, __eachEl) {
 			var _opts = $.extend({}, _AB_FN_.options, _arg_options);
 			
 			var _mEnter = "mouseenter",
@@ -354,7 +390,7 @@
 				_effect = _opts.effect,
 				_sEffect = _opts.sEffect,
 				_easing = _opts.easing,
-				_event = (_opts.eventType != "mouseover" ? "click" : _mEnter),
+				_event = (_opts.eventType != "mouseover" ? _AB_TV_.c : _mEnter),
 				_stopPropagation = f_rtnBool(_opts.stopPropagation),
 			
 				_autoPlay = f_rtnBool(_opts.autoPlay),
@@ -417,7 +453,7 @@
 				_total = (_total < 1 ? _mainEl.size() : _total);
 			var _tmpTotal = _total;
 			if(_total < 1){ return false; }
-
+			
 			/*滚动单个尺寸*/
 			var _sSize = {"s": [0, 0], "a": [0, 0]},
 			/*内容单个尺寸*/
@@ -481,7 +517,7 @@
 			 */
 			var f_initFuncDo = function() {
 				if($.isFunction(_opts.initFunc)) {
-					_opts.initFunc();
+					_opts.initFunc(__cntr);
 				}
 			};
 			
@@ -617,7 +653,7 @@
 				/*滚动方向*/
 				if(f_chkEl(_scrollEl)){
 					if(f_dir(_direction) == f_dir("l") || f_dir(_direction) == f_dir("r")){
-						_scrollEl.css({"float": "left"});
+						_scrollEl.css({"float": _AB_TV_.l});
 					}
 					switch(_direction){
 						case f_dir("t"):
@@ -641,7 +677,7 @@
 							}
 						break;
 						default:
-							_scrollEl.css({"display": "none"});
+							_scrollEl.css({"display": _AB_TV_.n});
 						break;
 					}
 				}
@@ -649,7 +685,7 @@
 				/* 内容 */
 				if(f_chkEl(_mainEl)){
 					if(f_dir(_effect) == f_dir("l") || f_dir(_effect) == f_dir("r")){
-						_mainEl.css({"float": "left"});
+						_mainEl.css({"float": _AB_TV_.l});
 					}
 					switch(_effect){
 						case f_dir("t"):
@@ -673,7 +709,7 @@
 							}
 						break;
 						default:
-							_mainEl.css({"display": "none"});
+							_mainEl.css({"display": _AB_TV_.n});
 						break;
 					}
 				}
@@ -806,29 +842,31 @@
 					
 					if(_direction == f_dir("l") || _direction == f_dir("r")){
 						if (!_isMarquee) {
-							_scrollEl.css("width", f_px(_sSize.s[0]));
+							_scrollEl.css(_AB_TV_.sw, f_px(_sSize.s[0]));
 
 							__tmpScrollVisS[0] = (_sSize.a[0] * _vis);
 							__tmpScrollBoxS[0] = (_sSize.a[0] * _tmpTotal);
-							__tmpWrapS = "width: " + f_px(__tmpScrollVisS[0]) + ";";
+
+							__tmpWrapS = _AB_TV_.sw + ":" + f_px(__tmpScrollVisS[0]) + ";";
 							__tmpScrollBoxCss.width = f_px(__tmpScrollBoxS[0]);
 						}
 					}else if(_direction == f_dir("t") || _direction == f_dir("b")){
 						if (!_isMarquee) {
-							_scrollEl.css("height", f_px(_sSize.s[1]));
+							_scrollEl.css(_AB_TV_.sh, f_px(_sSize.s[1]));
 
 							__tmpScrollVisS[1] = (_sSize.a[1] * _vis);
 							__tmpScrollBoxS[1] = (_sSize.a[1] * _tmpTotal);
-							__tmpWrapS = "height:" + f_px(__tmpScrollVisS[1]) + ";";
+
+							__tmpWrapS = _AB_TV_.sh + ":" + f_px(__tmpScrollVisS[1]) + ";";
 							__tmpScrollBoxCss.height = f_px(__tmpScrollBoxS[1]);
 						}
 					}else{
-						__tmpWrapS = "width: " + f_px(__tmpScrollVisS[0]) + ";";
+						__tmpWrapS = _AB_TV_.sw + ":" + f_px(__tmpScrollVisS[0]) + ";";
 						__tmpScrollBoxCss.width = f_px(__tmpScrollBoxS[0]);
 						__tmpScrollBoxCss.height = f_px(__tmpScrollBoxS[1]);
 					}
 					/*滚动临时包裹层*/
-					_scrollBox.wrap("<div class=\"sTempWrap\" style=\"position:relative; overflow:hidden; " + __tmpWrapS + "\"></div>");
+					_scrollBox.wrap("<div class=\"sTempWrap\" style=\"" + _AB_TV_.pr + __tmpWrapS + "\"></div>");
 					/*滚动盒子大小*/
 					_scrollBox.css(__tmpScrollBoxCss);
 					/*清空值*/
@@ -843,19 +881,19 @@
 						__tmpMainBoxCss = {"position": "relative"/*, "overflow":"hidden", "padding": f_px(0), "margin": f_px(0)*/};
 						
 					if(_effect == f_dir("l") || _effect == f_dir("r")){
-						_mainEl.css("width", f_px(_mSize.s[0]));
+						_mainEl.css(_AB_TV_.sw, f_px(_mSize.s[0]));
 						
 						__tmpMainBoxS[0] = (_mSize.a[0] * _tmpTotal);
-						__tmpWrapS = "position:relative; overflow:hidden; width: " + f_px(__tmpMainVisS[0]) + ";";
+						__tmpWrapS = _AB_TV_.pr + "width: " + f_px(__tmpMainVisS[0]) + ";";
 						__tmpMainBoxCss.width = f_px(__tmpMainBoxS[0]);
 					}else if(_effect == f_dir("t") || _effect == f_dir("b")){
-						_mainEl.css("height", f_px(_mSize.s[1]));
+						_mainEl.css(_AB_TV_.sh, f_px(_mSize.s[1]));
 						
 						__tmpMainBoxS[1] = (_mSize.a[1] * _tmpTotal);
-						__tmpWrapS = "position:relative; overflow:hidden; height:" + f_px(__tmpMainVisS[1]) + ";";
+						__tmpWrapS = _AB_TV_.pr + "height:" + f_px(__tmpMainVisS[1]) + ";";
 						__tmpMainBoxCss.height = f_px(__tmpMainBoxS[1]);
 					}else if(_effect ==  "fold"){
-						_mainEl.css({"position": "absolute", "top": "0px", "left": "0px", "width": f_px(_mSize.s[0])});
+						_mainEl.css({"position": "absolute", "top": f_px(0), "left": f_px(0), "width": f_px(_mSize.s[0])});
 						
 						/*__tmpMainBoxCss.overflow = "";*/
 						__tmpMainBoxCss.width = f_px(__tmpMainBoxS[0]);
@@ -937,8 +975,10 @@
 						}
 						__p = "";
 					}
+
 					_pageState = _pageState.children();
-					
+
+					/* bind */
 					_pageState.bind(_event, function(__e){
 						f_clearTime();
 						
@@ -947,6 +987,7 @@
 						
 						triggerTimeID = window.setTimeout(function(){
 							f_scrollDo(__p + 1);
+
 							/*鼠标离开是否继续自动执行*/
 							f_setStop(_mouseOverStop);
 							f_continueDo(__tCur);
@@ -1032,6 +1073,7 @@
 				
 				/*鼠标悬浮在容器上是否停止播放*/
 				if(_mouseOverStop || _hoverIsBtn){
+					/* Bind enter */
 					__cntr.bind(_mEnter, function(__e){
 						if(_mouseOverStop) {
 							f_clearTime();
@@ -1046,7 +1088,8 @@
 							}
 						}
 					});
-					
+
+					/* Bind leave */
 					__cntr.bind(_mLeave, function(__e){
 						if(_mouseOverStop) {
 							f_setStop(false);
@@ -1069,7 +1112,7 @@
 				/*方向*/
 				f_directionInit();
 			};
-			
+
 			/**
 			 * slide 效果执行
 			 */
@@ -1083,14 +1126,16 @@
 				
 				if(__oind != __ind){
 					f_updateCur(_index);
+
 					/*start function*/
 					f_startFuncDo();
 					f_slideEffectComm(__init, __ind);
 				}else{
 					if(_curOff){
 						var __SorH = f_isHide(_mainEl.eq(__ind - 1));
+
 						f_updateCur(_index, (!__SorH ? true : false));
-						f_slideEffectComm(__init, __ind, "", "", (!__SorH ? "hide" : "show"));
+						f_slideEffectComm(__init, __ind, "", "", (!__SorH ? _AB_TV_.h : _AB_TV_.s));
 					}
 				}
 				
@@ -1114,7 +1159,7 @@
 				var __dv = "";
 				__st = (!f_isValue(__st) ? _speed : __st);
 				__ef = (__ef == "n" ? false : true);
-				__SorH = (f_isValue(__SorH)) ? __SorH : "show";
+				__SorH = (f_isValue(__SorH)) ? __SorH : _AB_TV_.s;
 				__ind--;
 				
 				switch(_effect){
@@ -1123,13 +1168,13 @@
 						_mainEl.eq(__ind).animate({"opacity": __SorH}, __st, _easing, (function(){ (__ef ? f_completeFuncDo() : false); }));
 					break;
 					case "fold":
-						f_animateStop(_mainEl).not(":eq(" + __ind + ")").animate({"opacity": "hide"}, __st, _easing);
+						f_animateStop(_mainEl).not(":eq(" + __ind + ")").animate({"opacity": _AB_TV_.h}, __st, _easing);
 						_mainEl.eq(__ind).animate({"opacity": __SorH}, __st, _easing, (function(){ (__ef ? f_completeFuncDo() : false); }));
 					break;
 					case "slideDown":
 						/* 解决盒子元素,padding值时出现闪动 */
 						f_animateStop(_mainEl).not(":eq(" + __ind + ")").slideUp(__st, _easing);
-						if(__SorH == "show") {
+						if(__SorH == _AB_TV_.s) {
 							_mainEl.eq(__ind).slideDown(__st, _easing, (function(){ (__ef ? f_completeFuncDo() : false); }));
 						} else {
 							_mainEl.eq(__ind).slideUp(__st, _easing, (function(){ (__ef ? f_completeFuncDo() : false); }));
@@ -1138,7 +1183,7 @@
 					case f_dir("t"):
 						__dv = 0 - (__ind * _mSize.a[1]);
 						if(__init){
-							f_animateStop(_mainBox).css("top", f_px(__dv));
+							f_animateStop(_mainBox).css(_AB_TV_.t, f_px(__dv));
 							f_completeFuncDo();
 						}else{
 							f_animateStop(_mainBox).animate({"top": f_px(__dv)}, __st, _easing, (function(){ (__ef ? f_completeFuncDo() : false); }));
@@ -1156,7 +1201,7 @@
 					case f_dir("l"):
 						__dv = 0 - (__ind * _mSize.a[0]);
 						if(__init){
-							f_animateStop(_mainBox).css("left",f_px(__dv));
+							f_animateStop(_mainBox).css(_AB_TV_.l, f_px(__dv));
 							f_completeFuncDo();
 						}else{
 							f_animateStop(_mainBox).animate({"left": f_px(__dv)}, __st, _easing, (function(){ (__ef ? f_completeFuncDo() : false); }));
@@ -1174,7 +1219,7 @@
 					default:
 						/* 新版本 */
 						f_animateStop(_mainEl).not(":eq(" + __ind + ")").hide(__st, _easing);
-						if(__SorH == "show") {
+						if(__SorH == _AB_TV_.s) {
 							_mainEl.eq(__ind).show(__st, _easing, (function(){ (__ef ? f_completeFuncDo() : false); }));
 						} else {
 							_mainEl.eq(__ind).hide(__st, _easing, (function(){ (__ef ? f_completeFuncDo() : false); }));
@@ -1424,6 +1469,7 @@
 			 */
 			var f_scrollDo = function(__pind, __sN){
 				f_clearTime();
+
 				_page = (__pind ? __pind : _page);
 				__sN = (f_isValue(__sN) ? __sN : (_page - 1) * _scroll);
 				
@@ -1529,11 +1575,11 @@
 			var f_iTriggerDo = function(){
 				if(!f_chkEl(_iTrigger)){ return false; }
 				
-				_iTrigger.bind("click", "", function(){
+				_iTrigger.bind(_AB_TV_.c, "", function(){
 					f_clearTime();
 					var __curSelf = $(this);
 					
-					$(window.document).unbind("click");
+					$(window.document).unbind(_AB_TV_.c);
 					
 					/* 响应回调函数 */
 					try{
@@ -1583,7 +1629,7 @@
 								
 								f_triggerEffect(__cTarget, "s", _effect, _speed, _easing, (function(){ f_completeFuncDo(); }));
 								
-								$(window.document).bind("click", function(__e){
+								$(window.document).bind(_AB_TV_.c, function(__e){
 								  	if(!_recCur){ return 1;}
 									
 									var __src = $(__e.target || __e.srcElement, __cParent)[0];
@@ -1594,7 +1640,7 @@
 									  	__src = __src.parentNode;
 									}while(__src.parentNode);
 									
-									$(this).unbind("click");
+									$(this).unbind(_AB_TV_.c);
 									f_setClass(_recCur[0], _onClass, _offClass);
 									f_triggerEffect(_recCur[1], "h", _effect, _speed, _easing, (function(){ f_endFuncDo(); }));
 							  });
@@ -1751,38 +1797,70 @@
 					f_triggerEffect(_recCur[1], "s", _effect, _speed, _easing, (function(){ f_completeFuncDo(); }));
 				}
 			};
+
+			/**
+			 * 类型列表
+			 */
+			var f_appTypeMap = function () {
+				return {
+					/* 焦点图/多图滚动/组图/无缝隙滚动/选项卡切换 */
+					"slide": function () {
+						f_init();
+						f_slideDo(_index, true);
+					},
+					/* 导航菜单 */
+					"menu": function () {
+						f_menuDo();
+					},
+					/* 下拉菜单(点击菜单外的元素，关闭菜单) */
+					"box": function () {
+						f_boxDo();
+					}
+				};
+			};
 			
 			/**
 			 * 创建效果应用
 			 */
 			var f_appCreate = function() {
-				/* initFunc */
 				try{
+					/* initialization */
 					f_initFuncDo();
+
+					/* 获取效果类型 */
+					var __typeMap = f_appTypeMap();
+
+					/* 选择效果类型 */
+					if (__typeMap.hasOwnProperty(_opts.type)) {
+						__typeMap[_opts.type]();
+					} else {
+						__cntr.prepend("Error in type. type:[slide, box, menu]");
+					}
 				}catch(__e){
 					alert(__e.message);
 				}
-				
-				/* 选择类型 */
-				switch (_opts.type) {
-					case "slide":
-						f_init();
-						f_slideDo(_index, true);
-						break;
-					case "menu":
-						f_menuDo();
-						break;
-					case "box":
-						f_boxDo();
-						break;
-					default:
-						alert("Error in type. type:[slide, box, menu]");
-						break;
-				};
 			};
-			
+
+			/**
+			 * 生成返回参数
+			 */
+			var f_makeReturn = function() {
+				__rtnObject.slide[__eachIndex] = function (__eIndex) { f_slideDo(__eIndex); };
+				__rtnObject.mPrev[__eachIndex] = function () { f_mPrevDo(); };
+				__rtnObject.mNext[__eachIndex] = function () { f_mNextDo(); };
+
+				__rtnObject.scroll[__eachIndex] = function (__ePage) { f_scrollDo(__ePage); };
+				__rtnObject.sPrev[__eachIndex] = function () { f_sPrevDo(); };
+				__rtnObject.sNext[__eachIndex] = function () { f_sNextDo(); };
+			};
+
 			/* 创建效果应用开始 */
 			f_appCreate();
+
+			/* Return */
+			f_makeReturn();
 		});
+
+		return __rtnObject;
 	};
 })(jQuery);
